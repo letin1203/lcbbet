@@ -1,5 +1,39 @@
 <template>
   <v-container grid-list-xs>
+    <v-layout row wrap>
+      <v-flex xs3 sm2 v-for="(item, index) in tournament.commonParticipants" :key="index">
+        <v-card>
+          <v-img :src="getParticipantLogo(item)" aspect-ratio="1" ></v-img>
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">{{getParticipantTitle(item)}}</h3>
+              <div> {{ getParticipantRank(item) }} </div>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat color="orange">Share</v-btn>
+            <v-btn flat color="orange">Explore</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap>
+      <v-flex xs3 sm6 v-for="(item, index) in tournamentList" :key="index">
+        <v-card>
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">{{ item.name }}</h3>
+              <div>{{ item.date }}</div>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn @click="getTournament(item.link)" flat color="orange"
+              >Fetch</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
     <v-layout>
       <v-flex>
         <div id="spinner_container">
@@ -37,6 +71,7 @@
           </v-layout>
         </v-container>
       </v-flex>
+
     </v-layout>
   </v-container>
 </template>
@@ -44,6 +79,8 @@
 <script>
 import axios from 'axios';
 import { mapState, mapActions } from 'vuex';
+import utils from '@/utils';
+import { APPCONFIG } from '@/config';
 
 export default {
   data() {
@@ -56,7 +93,9 @@ export default {
   },
   computed: {
     ...mapState({
-      gosuHtml: state => state.dataFetched
+      gosuHtml: state => state.dataFetched,
+      tournamentList: state => state.tournaments.extractItems,
+      tournament: state => state.tournaments.extractItem
     })
   },
   mounted() {
@@ -70,13 +109,21 @@ export default {
           // TODO toast error
         }
       });
-    this.fetchUrl();
+    let payload = {
+      callback: this.fetchListTournament
+    }
+    this.getHtml(payload);
   },
   methods: {
     ...mapActions({
+      getHtml: 'getHtml',
       postOne: 'tournaments/postOne',
-      fetchUrl: 'fetchUrl'
+      getExtractItems: 'tournaments/getExtractItems',
+      getExtractItem: 'tournaments/getExtractItem'
     }),
+    fetchListTournament() {
+      this.getExtractItems(this.gosuHtml);
+    },
     post() {
       let payload = {
         data: {
@@ -86,6 +133,25 @@ export default {
         }
       };
       this.postOne(payload);
+    },
+    getTournament(link) {
+      let payload = {
+        url: APPCONFIG.TOURNAMENT_DETAIL_URL + link,
+        callback: this.fetchTournament
+      };
+      utils.fetchUrl(payload);
+    },
+    fetchTournament(data) {
+      this.getExtractItem(data);
+    },
+    getParticipantTitle(participant) {
+      return $(participant).find('.name').text();
+    },
+    getParticipantRank(participant) {
+      return $(participant).find('small').text();
+    },
+    getParticipantLogo(participant) {
+      return $(participant).find('.avatar').prop('style').cssText.split('"')[1];
     }
   }
 };

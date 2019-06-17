@@ -1,13 +1,17 @@
 import firebase from '@/firebase';
 import transform from './transform';
 import router from '@/router';
+import extract from './extract';
+import utils from '@/utils';
 
 export default {
   namespaced: true,
 
   state: {
     items: [],
-    item: {}
+    item: {},
+    extractItems: [],
+    extractItem: {}
   },
 
   mutations: {
@@ -16,6 +20,12 @@ export default {
     },
     setItem: (state, item) => {
       state.item = item;
+    },
+    setExtractItems: (state, items) => {
+      state.extractItems = items;
+    },
+    setExtractItem: (state, item) => {
+      state.extractItem = item;
     }
   },
 
@@ -54,6 +64,22 @@ export default {
           createdAt: new Date().getTime()
         })
         .then(commit('setItem', payload.data));
+    },
+    getExtractItems: ({ commit }, payload) => {
+      let result = extract.extractListTournament(payload);
+      commit('setExtractItems', result);
+      if (payload.callback) {
+        payload.callback();
+      }
+    },
+    getExtractItem: ({ commit }, payload) => {
+
+      let result = extract.extractTournament(payload);
+
+      commit('setExtractItem', result);
+      if (payload.callback) {
+        payload.callback();
+      }
     }
   }
 };

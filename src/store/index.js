@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import users from './modules/users';
 import tournaments from './modules/tournaments';
 import matches from './modules/matches';
-import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -23,20 +22,23 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async fetchUrl({ commit }) {
-      try {
-        let response = await axios.get(
-          'https://lcb-fetch-api.herokuapp.com/getData',
-          {
-            data: {
-              url: 'https://www.gosugamers.net/dota2'
-            }
+    getHtml: ({ commit }, payload) => {
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const url = 'https://www.gosugamers.net/dota2/tournaments';
+      fetch(proxyUrl + url)
+        .then(response => response.text())
+        .then(contents => {
+          commit('setGosuHtml', contents);
+          if (payload.callback) {
+            payload.callback();
           }
-        );
-        commit('setGosuHtml', response.data.data);
-      } catch (error) {
-        commit('setGosuHtml', '');
-      }
+        })
+        .catch(() => {
+          commit('setGosuHtml', '');
+          if (payload.error) {
+            payload.error();
+          }
+        });
     }
   }
 });

@@ -5,6 +5,8 @@ import router from './router';
 import store from '@/store';
 import './registerServiceWorker';
 import '@/firebase';
+window.$ = require('jquery');
+window.jQuery = require('jquery');
 
 Vue.config.productionTip = false;
 
