@@ -1,24 +1,33 @@
 <template>
-  <v-container grid-list-xs>
+  <v-container grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs3 sm2 v-for="(item, index) in tournament.commonParticipants" :key="index">
+      <v-flex xs4 sm6 v-for="(item, index) in tournament.commonParticipants" :key="index">
         <v-card>
-          <v-img :src="getParticipantLogo(item)" aspect-ratio="1" ></v-img>
+          <v-img :src="getParticipantLogo(item)" class="logo">
+            <v-container fill-height fluid>
+              <v-layout fill-height>
+                <v-flex xs12 align-end flexbox>
+                  <span class="headline black--text">{{getParticipantTitle(item)}}</span>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-img>
           <v-card-title primary-title>
             <div>
               <h3 class="headline mb-0">{{getParticipantTitle(item)}}</h3>
-              <div> {{ getParticipantRank(item) }} </div>
+              <div>
+                {{ getParticipantRank(item) }}
+              </div>
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat color="orange">Share</v-btn>
-            <v-btn flat color="orange">Explore</v-btn>
+            <v-btn outline block color="green">Select This Team</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <v-flex xs3 sm6 v-for="(item, index) in tournamentList" :key="index">
+      <v-flex xs4 sm6 v-for="(item, index) in tournamentList" :key="index">
         <v-card>
           <v-card-title primary-title>
             <div>
@@ -27,9 +36,7 @@
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn @click="getTournament(item.link)" flat color="orange"
-              >Fetch</v-btn
-            >
+            <v-btn outline block color="green">Select This Tournament</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -158,17 +165,14 @@ export default {
 </script>
 
 <style scoped>
-img {
-  max-width: 100%;
-  height: auto;
-  width: auto\9;
-  /* ie8 */
-}
 #spinner_container {
   text-align: center;
 }
 .spinner {
   margin: auto;
   margin: 4rem;
+}
+.logo {
+  height: 200px;
 }
 </style>
