@@ -73,7 +73,6 @@ export default {
       }
     },
     getExtractItem: ({ commit }, payload) => {
-
       let result = extract.extractTournament(payload);
 
       commit('setExtractItem', result);

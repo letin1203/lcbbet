@@ -22,7 +22,22 @@
         </v-btn>
       </div>
     </v-toolbar>
-
+    <v-dialog v-model="loading" fullscreen full-width>
+      <v-container fluid fill-height style="background-color: rgba(255, 255, 255, 0.5);">
+        <v-layout justify-center align-center>
+          <v-progress-circular
+            indeterminate
+            color="primary" size="64">
+          </v-progress-circular>
+        </v-layout>
+      </v-container>
+    </v-dialog>
+    <v-snackbar v-model="snackbar.show" bottom right :color="snackbar.color">
+      {{ snackbar.text }}
+      <v-btn dark flat @click="snackbar.show = false">
+        Close
+      </v-btn>
+    </v-snackbar>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -37,7 +52,9 @@ export default {
   computed: {
     ...mapState({
       matches: state => state.matches.items,
-      isAuthenticated: state => state.users.isAuthenticated
+      isAuthenticated: state => state.users.isAuthenticated,
+      snackbar: state => state.snackbar,
+      loading: state => state.loading
     }),
     matchesLength() {
       return this.matches ? this.matches.length : 0;

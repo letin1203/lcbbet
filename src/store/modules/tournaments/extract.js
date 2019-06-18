@@ -8,10 +8,17 @@ function extractTournaments(tournamentList) {
   let result = [];
   jQuery.each(tournamentList, (index, item) => {
     let tour = {
-      name: $(item).find('.tournament-name a h3').text(),
-      link: $(item).find('.tournament-name a').prop('href').split('/')[5],
-      date: $(item).find('.tournament-details span').text()
-    }
+      name: $(item)
+        .find('.tournament-name a h3')
+        .text(),
+      link: $(item)
+        .find('.tournament-name a')
+        .prop('href')
+        .split('/')[5],
+      date: $(item)
+        .find('.tournament-details span')
+        .text()
+    };
     result.push(tour);
   });
   return result;
@@ -22,7 +29,9 @@ function extractTournament(tournamentJquery) {
   let result = {
     name: content.find('.tournament-name').text(),
     date: content.find('.apex-info.cell li:first-child').text(),
-    participantsLink: content.find('.tournament-participants .button.green.arrow').text(),
+    participantsLink: content
+      .find('.tournament-participants .button.green.arrow')
+      .text(),
     commonParticipants: content.find('.tournament-participants .participant'),
     createdAt: new Date()
   };

@@ -13,12 +13,24 @@ export default new Vuex.Store({
     matches
   },
   state: {
-    dataFetched: ''
+    dataFetched: '',
+    loading: false,
+    snackbar: {
+      show: false,
+      text: '',
+      color: 'success'
+    }
   },
   getters: {},
   mutations: {
     setGosuHtml: (state, payload) => {
       state.dataFetched = payload;
+    },
+    setSnackbar: (state, payload) => {
+      state.snackbar = payload;
+    },
+    setLoading: (state, payload) => {
+      state.loading = payload;
     }
   },
   actions: {
@@ -39,6 +51,12 @@ export default new Vuex.Store({
             payload.error();
           }
         });
+    },
+    loadSnackbar: ({ commit }, payload) => {
+      commit('setSnackbar', payload);
+    },
+    setLoading: ({ commit }, payload) => {
+      commit('setLoading', payload);
     }
   }
 });

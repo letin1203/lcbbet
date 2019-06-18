@@ -24,6 +24,12 @@ export default new Router({
         import(/* webpackChunkName: "login" */ './components/Login.vue')
     },
     {
+      path: '/tournament-participants',
+      name: 'tournament-participants',
+      component: () =>
+        import(/* webpackChunkName: "tournament-participants" */ './components/TournamentParticipants.vue')
+    },
+    {
       path: '/add-tournament',
       name: 'add-tournament',
       meta: {

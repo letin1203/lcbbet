@@ -16,4 +16,4 @@ function fetchUrl(payload) {
 
 export default {
   fetchUrl
-}
+};
