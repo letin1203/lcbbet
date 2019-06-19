@@ -14,6 +14,11 @@ function fetchUrl(payload) {
     });
 }
 
+function getCreatedString(createdBy, createdAt) {
+  return 'Created by ' + createdBy + ' on ' + new Date(createdAt);
+}
+
 export default {
-  fetchUrl
+  fetchUrl,
+  getCreatedString
 };

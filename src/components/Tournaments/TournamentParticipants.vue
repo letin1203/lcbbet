@@ -9,19 +9,18 @@
       >
         <v-card>
           <v-toolbar color="purple" dark>
-            <v-toolbar-title>{{ getParticipantTitle(item) }}</v-toolbar-title>
+            <v-toolbar-title>{{ item.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon>
               <v-icon>more_vert</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-img :src="getParticipantLogo(item)" class="logo">
-          </v-img>
+          <v-img :src="item.logo" class="logo"> </v-img>
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0">{{ getParticipantTitle(item) }}</h3>
+              <h3 class="headline mb-0">{{ item.title }}</h3>
               <div>
-                {{ getParticipantRank(item) }}
+                {{ item.rank }}
               </div>
             </div>
           </v-card-title>
@@ -42,36 +41,11 @@ export default {
     ...mapState({
       tournament: state => state.tournaments.extractItem
     })
-  },
-  methods: {
-    getParticipantTitle(participant) {
-      return $(participant)
-        .find('.name')
-        .text();
-    },
-    getParticipantRank(participant) {
-      return $(participant)
-        .find('small')
-        .text();
-    },
-    getParticipantLogo(participant) {
-      return $(participant)
-        .find('.avatar')
-        .prop('style')
-        .cssText.split('"')[1];
-    }
   }
 };
 </script>
 
 <style scoped>
-#spinner_container {
-  text-align: center;
-}
-.spinner {
-  margin: auto;
-  margin: 4rem;
-}
 .logo {
   height: 200px;
 }

@@ -7,17 +7,15 @@ function extractListTournament(tournamentsJquery) {
 function extractTournaments(tournamentList) {
   let result = [];
   jQuery.each(tournamentList, (index, item) => {
+    let name = $(item).find('.tournament-name a h3').text();
+    let link = $(item).find('.tournament-name a').prop('href').split('/')[5];
+    let gId = link.split('-')[0];
+    let date = $(item).find('.tournament-details span').text();
     let tour = {
-      name: $(item)
-        .find('.tournament-name a h3')
-        .text(),
-      link: $(item)
-        .find('.tournament-name a')
-        .prop('href')
-        .split('/')[5],
-      date: $(item)
-        .find('.tournament-details span')
-        .text()
+      name: name,
+      link: link,
+      gId: gId,
+      date: date 
     };
     result.push(tour);
   });
@@ -32,9 +30,37 @@ function extractTournament(tournamentJquery) {
     participantsLink: content
       .find('.tournament-participants .button.green.arrow')
       .text(),
-    commonParticipants: content.find('.tournament-participants .participant'),
+    commonParticipants: extractListParticipant(
+      content.find('.tournament-participants .participant')
+    ),
     createdAt: new Date()
   };
+  return result;
+}
+
+function extractParticipant(data) {
+  let title = $(data)
+    .find('.name')
+    .text();
+  let rank = $(data)
+    .find('small')
+    .text();
+  let logo = $(data)
+    .find('.avatar')
+    .prop('style')
+    .cssText.split('"')[1];
+  return {
+    title: title,
+    rank: rank,
+    logo: logo
+  };
+}
+
+function extractListParticipant(list) {
+  let result = [];
+  jQuery.each(list, (index, item) => {
+    result.push(extractParticipant(item));
+  });
   return result;
 }
 

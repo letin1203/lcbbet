@@ -27,16 +27,25 @@ export default new Router({
       path: '/tournament-participants',
       name: 'tournament-participants',
       component: () =>
-        import(/* webpackChunkName: "tournament-participants" */ './components/TournamentParticipants.vue')
+        import(/* webpackChunkName: "tournament-participants" */ './components/Tournaments/TournamentParticipants.vue')
     },
     {
-      path: '/add-tournament',
-      name: 'add-tournament',
+      path: '/add-tournaments',
+      name: 'add-tournaments',
       meta: {
         authRequired: true
       },
       component: () =>
-        import(/* webpackChunkName: "add-tournament" */ './components/AddTournament.vue')
+        import(/* webpackChunkName: "add-tournaments" */ './components/Tournaments/AddTournaments.vue')
+    },
+    {
+      path: '/add-matches/:id',
+      name: 'add-matches',
+      meta: {
+        authRequired: true
+      },
+      component: () =>
+        import(/* webpackChunkName: "add-match" */ './components/Matches/AddMatches.vue')
     }
   ]
 });

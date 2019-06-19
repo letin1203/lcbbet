@@ -1,8 +1,8 @@
 <template>
   <v-container grid-list-xs grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs12 sm6 v-for="(item, index) in tournamentList" :key="index">
-        <v-card>
+      <v-flex xs12 md6 lg4 v-for="(item, index) in tournamentList" :key="index">
+        <v-card class="flex-card">
           <v-toolbar color="purple" dark>
             <v-toolbar-title>{{ item.name }}</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -10,42 +10,17 @@
               <v-icon>more_vert</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-card-title primary-title>
+          <v-card-text class="grow">
             <div>
               <h3 class="headline mb-0">{{ item.name }}</h3>
               <div>{{ item.date }}</div>
             </div>
-          </v-card-title>
+          </v-card-text>
           <v-card-actions>
             <v-btn outline block color="green" @click="getTournament(item.link)">View Participants</v-btn>
+            <v-btn :disabled="isTournamentDisable(item.gId)" outline block color="green" @click="addTournament(item)">{{ getAddBtnText(item.gId) }}</v-btn>
           </v-card-actions>
         </v-card>
-      </v-flex>
-    </v-layout>
-    <v-layout>
-      <v-flex>
-        <v-container fluid style="min-height: 0" grid-list-lg>
-          <v-layout row wrap>
-            <v-flex xs12>
-              <v-text-field
-                v-model="title"
-                name="title"
-                label="Describe me"
-                id="title"
-              />
-              <v-text-field
-                v-model="author"
-                name="author"
-                label="Author"
-                hint="your name"
-                id="author"
-              />
-              <v-btn block color="primary" @click="post()">
-                SUBMIT
-              </v-btn>
-            </v-flex>
-          </v-layout>
-        </v-container>
       </v-flex>
     </v-layout>
   </v-container>
@@ -55,6 +30,7 @@
 import { mapState, mapActions } from 'vuex';
 import utils from '@/utils';
 import { APPCONFIG } from '@/config';
+import _ from 'lodash';
 
 export default {
   data() {
@@ -65,7 +41,9 @@ export default {
   },
   computed: {
     ...mapState({
+      user: state => state.users.user,
       gosuHtml: state => state.dataFetched,
+      gTournamentList: state => state.tournaments.items,
       tournamentList: state => state.tournaments.extractItems,
       tournament: state => state.tournaments.extractItem
     })
@@ -93,23 +71,27 @@ export default {
       this.onSuccessFetched();
       this.getExtractItems(this.gosuHtml);
     },
-    post() {
+    addTournament(item) {
       let payload = {
         data: {
-          imgUrl: this.imgUrl,
-          title: this.title,
-          createdBy: this.author
+          name: item.name,
+          date: item.date,
+          link: item.link,
+          gId: item.gId,
+          createdBy: this.user.user.email
         }
       };
       this.postOne(payload);
     },
-    onSuccessFetched () {
+    onSuccessFetched() {
       this.loadSnackbar({
         show: true,
         text: APPCONFIG.FETCHED_SUCCESS_MESSAGE,
         color: 'success'
       });
-      setTimeout(() => { this.setLoading(false); }, 200);
+      setTimeout(() => {
+        this.setLoading(false);
+      }, 200);
     },
     getTournament(link) {
       this.setLoading(true);
@@ -126,21 +108,11 @@ export default {
         name: 'tournament-participants'
       });
     },
-    getParticipantTitle(participant) {
-      return $(participant)
-        .find('.name')
-        .text();
+    isTournamentDisable(gId) {
+      return _.findIndex(this.gTournamentList, function(o) { return o.gId === gId; }) > -1;
     },
-    getParticipantRank(participant) {
-      return $(participant)
-        .find('small')
-        .text();
-    },
-    getParticipantLogo(participant) {
-      return $(participant)
-        .find('.avatar')
-        .prop('style')
-        .cssText.split('"')[1];
+    getAddBtnText(gId) {
+      return this.isTournamentDisable(gId) ? 'Added' : 'Add Tournament';
     }
   }
 };

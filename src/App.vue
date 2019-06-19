@@ -23,11 +23,13 @@
       </div>
     </v-toolbar>
     <v-dialog v-model="loading" fullscreen full-width>
-      <v-container fluid fill-height style="background-color: rgba(255, 255, 255, 0.5);">
+      <v-container
+        fluid
+        fill-height
+        style="background-color: rgba(255, 255, 255, 0.5);"
+      >
         <v-layout justify-center align-center>
-          <v-progress-circular
-            indeterminate
-            color="primary" size="64">
+          <v-progress-circular indeterminate color="primary" size="64">
           </v-progress-circular>
         </v-layout>
       </v-container>
@@ -80,3 +82,11 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.flex-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+</style>
+
