@@ -42,25 +42,18 @@ export default {
     getOne: ({ commit }, payload) => {
       commit('setItem', payload.data);
     },
+    setOne: ({ commit }, payload) => {
+      commit('setItem', payload);
+    },
     postOne: ({ commit }, payload) => {
-      let d = new Date();
-      let days = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ];
       firebase.db
         .collection('tournaments')
         .add({
-          imgUrl: payload.data.imgUrl,
-          title: payload.data.title,
-          info: `Created by ${
-            payload.data.createdBy != '' ? payload.data.createdBy : 'Unknow'
-          } on ${days[d.getDay()]}`,
+          name: payload.data.name,
+          date: payload.data.date,
+          link: payload.data.link,
+          gId: payload.data.gId,
+          createdBy: payload.data.createdBy,
           createdAt: new Date().getTime()
         })
         .then(commit('setItem', payload.data));
@@ -73,7 +66,6 @@ export default {
       }
     },
     getExtractItem: ({ commit }, payload) => {
-
       let result = extract.extractTournament(payload);
 
       commit('setExtractItem', result);
