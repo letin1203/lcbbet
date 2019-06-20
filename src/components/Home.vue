@@ -9,7 +9,7 @@
           <v-toolbar color="purple" dark>
             <v-toolbar-title>{{ tournament.name }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-menu bottom left>
+            <v-menu bottom left v-if="isAuthenticated">
               <template v-slot:activator="{ on }">
                 <v-btn
                   dark
@@ -21,12 +21,12 @@
               </template>
 
               <v-list>
-                <v-list-tile v-show="menu.show"
+                <v-list-tile 
                   v-for="(menu, i) in menuItems"
                   :key="i"
                   @click="goMenu(menu.url, tournament)"
                 >
-                  <v-list-tile-title v-if="menu.show">{{ menu.title }}</v-list-tile-title>
+                  <v-list-tile-title>{{ menu.title }}</v-list-tile-title>
                 </v-list-tile>
               </v-list>
             </v-menu>
@@ -56,8 +56,8 @@ export default {
     }),
     menuItems() {
       return [
-        { title: 'Add Matches', url: 'add-matches', show: this.isAuthenticated },
-        { title: 'Go Bet', url: 'tournament-matches', show: this.isAuthenticated }
+        { title: 'Add Matches', url: 'add-matches' },
+        { title: 'Go Bet', url: 'tournament-matches' }
       ]
     }
   },

@@ -45,13 +45,22 @@ export default {
   },
   methods: {
     ...mapActions({
-      getListMatches: 'matches/getAll',
+      getListMatches: 'matches/getListByTournament',
       setMatches: 'matches/setExtractItems',
       setTournament: 'matches/setOne'
     })
   },
   mounted() {
-    this.getListMatches();
+    if (this.$route.params.id) {
+      let payload = {
+        gId: this.$route.params.id
+      }
+      this.getListMatches(payload);
+    } else {
+      this.$router.push({
+        name: '/'
+      })
+    }
   }
 };
 </script>

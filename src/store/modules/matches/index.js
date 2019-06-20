@@ -40,6 +40,15 @@ export default {
           commit('setItems', transform.convertListItem(snapShot));
         });
     },
+    getListByTournament: ({ commit }, payload) => {
+      firebase.db
+        .collection('matches')
+        .orderBy('createdAt')
+        .where("tournament.gId", "==", payload.gId)
+        .onSnapshot(snapShot => {
+          commit('setItems', transform.convertListItem(snapShot));
+        });
+    },
     getOne: ({ commit }, payload) => {
       commit('setItem', payload.data);
     },
