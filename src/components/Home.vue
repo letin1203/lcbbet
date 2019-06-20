@@ -57,7 +57,7 @@ export default {
     menuItems() {
       return [
         { title: 'Add Matches', url: 'add-matches', show: this.isAuthenticated },
-        { title: 'Go Bet', url: 'bet', show: true }
+        { title: 'Go Bet', url: 'tournament-matches', show: this.isAuthenticated }
       ]
     }
   },

@@ -46,6 +46,12 @@ export default new Router({
       },
       component: () =>
         import(/* webpackChunkName: "add-match" */ './components/Matches/AddMatches.vue')
+    },
+    {
+      path: '/:id/matches',
+      name: 'tournament-matches',
+      component: () =>
+        import(/* webpackChunkName: "list-matches" */ './components/Matches/ListMatches.vue')
     }
   ]
 });
