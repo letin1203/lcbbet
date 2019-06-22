@@ -1,12 +1,15 @@
 <template>
   <v-container grid-list-xs>
     <v-layout row wrap>
+      <v-flex v-if="matches.length === 0">
+        <h1 class="text-xs-center">Méo có match nào để bet.</h1>
+      </v-flex>
       <v-flex v-for="match in matches" :key="match.id" xs12 md6 x13 pa-2>
         <v-card class="flex-card">
           <v-toolbar color="purple" dark>
             <v-toolbar-title>{{ match.teamRed.name }} vs {{ match.teamBlue.name }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-menu bottom left>
+            <v-menu bottom left v-if="isAuthenticated">
               <template v-slot:activator="{ on }">
                 <v-btn
                   dark
@@ -16,6 +19,11 @@
                   <v-icon>more_vert</v-icon>
                 </v-btn>
               </template>
+              <v-list>
+                <v-list-tile @click="bet(match)">
+                  <v-list-tile-title>Bet</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
             </v-menu>
           </v-toolbar>
           <v-card-text class="grow">
@@ -25,6 +33,7 @@
               <h5>{{ match.gId }}</h5>
               <div>{{ match.date }}</div>
               <div>Result: {{ match.result }}</div>
+              <div>{{ getCreatedString(match) }}</div>
             </div>
           </v-card-text>
         </v-card>
@@ -34,13 +43,15 @@
 </template>
 <script>
 import utils from '@/utils';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
     ...mapState({
-      isAuthenticated: state => state.users.isAuthenticated,
       matches: state => state.matches.items
+    }),
+    ...mapGetters({
+      isAuthenticated: 'users/isAuthenticated'
     })
   },
   methods: {
@@ -48,7 +59,10 @@ export default {
       getListMatches: 'matches/getListByTournament',
       setMatches: 'matches/setExtractItems',
       setTournament: 'matches/setOne'
-    })
+    }),
+    getCreatedString(item) {
+      return utils.getCreatedString(item.createdBy, item.createdAt);
+    },
   },
   mounted() {
     if (this.$route.params.id) {

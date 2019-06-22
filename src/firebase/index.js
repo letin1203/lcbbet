@@ -12,7 +12,6 @@ const config = {
 };
 
 firebase.initializeApp(config);
-
 // Initialize Cloud Firestore through Firebase
 let db = firebase.firestore();
 

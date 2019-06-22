@@ -46,13 +46,15 @@
 </template>
 <script>
 import utils from '@/utils';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
     ...mapState({
-      isAuthenticated: state => state.users.isAuthenticated,
       tournaments: state => state.tournaments.items
+    }),
+    ...mapGetters({
+      isAuthenticated: 'users/isAuthenticated'
     }),
     menuItems() {
       return [

@@ -47,16 +47,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import firebase from 'firebase';
 
 export default {
   name: 'App',
   computed: {
     ...mapState({
       matches: state => state.matches.items,
-      isAuthenticated: state => state.users.isAuthenticated,
       snackbar: state => state.snackbar,
       loading: state => state.loading
+    }),
+    ...mapGetters({
+      isAuthenticated: 'users/isAuthenticated'
     }),
     matchesLength() {
       return this.matches ? this.matches.length : 0;

@@ -7,8 +7,13 @@ export default {
   state: {
     items: [],
     item: {},
-    user: null,
-    isAuthenticated: false
+    user: null
+  },
+
+  getters: {
+    isAuthenticated: state => {
+      return state.user !== null;
+    }
   },
 
   mutations: {
@@ -20,9 +25,6 @@ export default {
     },
     setUser: (state, payload) => {
       state.user = payload;
-    },
-    setIsAuthenticated: (state, payload) => {
-      state.isAuthenticated = payload;
     }
   },
 
@@ -39,12 +41,10 @@ export default {
         .createUserWithEmailAndPassword(email, password)
         .then(user => {
           commit('setUser', user);
-          commit('setIsAuthenticated', true);
           router.push('/');
         })
         .catch(() => {
           commit('setUser', null);
-          commit('setIsAuthenticated', false);
         });
     },
     userLogin: ({ commit }, { email, password }) => {
@@ -53,26 +53,22 @@ export default {
         .signInWithEmailAndPassword(email, password)
         .then(user => {
           commit('setUser', user);
-          commit('setIsAuthenticated', true);
           router.push('/');
         })
         .catch(() => {
           commit('setUser', null);
-          commit('setIsAuthenticated', false);
         });
     },
-    userLogout({ commit }) {
+    userLogout: ({ commit }) => {
       firebase
         .auth()
         .signOut()
         .then(() => {
           commit('setUser', null);
-          commit('setIsAuthenticated', false);
           router.push('/');
         })
         .catch(() => {
           commit('setUser', null);
-          commit('setIsAuthenticated', false);
           router.push('/');
         });
     }
