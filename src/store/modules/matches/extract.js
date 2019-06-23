@@ -33,16 +33,33 @@ function extractMatch(matchJquery) {
     bestOf: content.find('.best-of').text().trim(),
     date: content.find('.match .details small').text().trim()
   };
+  result.date = result.date.split('CEST')[0];
   let teamRed = {
     link: content.find('.match .team').eq(0).find('h2 a').prop('href').split('/')[5],
     name: content.find('.match .team').eq(0).find('h2 a').text(),
-    rate: content.find('#gosubetOptions .team-1 small').text().replace('%', '')
+    rate: content.find('#gosubetOptions .team-1 small').text().replace('%', ''),
+    logo: content.find('.match .avatar').eq(0).prop('style').cssText.split('"')[1]
   };
   let teamBlue = {
     link: content.find('.match .team').eq(1).find('h2 a').prop('href').split('/')[5],
     name: content.find('.match .team').eq(1).find('h2 a').text(),
-    rate: content.find('#gosubetOptions .team-2 small').text().replace('%', '')
+    rate: content.find('#gosubetOptions .team-2 small').text().replace('%', ''),
+    logo: content.find('.match .avatar').eq(1).prop('style').cssText.split('"')[1]
   };
+  if (teamRed.rate === '0') {
+    if (teamBlue.rate === '0') {
+      if (result.bestOf.includes('2')) {
+        teamRed.rate = '33';
+        teamBlue.rate = '33';
+      } else {  
+        teamRed.rate = '50';
+        teamBlue.rate = '50';
+      }
+    } else {
+      teamRed.rate = '10';
+      teamBlue.rate = '90';
+    }
+  }
   result.teamRed = teamRed;
   result.teamBlue = teamBlue;
   result.result = '';

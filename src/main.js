@@ -11,17 +11,23 @@ window.jQuery = require('jquery');
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.authRequired)) {
-    if (!store.state.users.user) {
-      next({
-        path: '/login'
-      });
-    } else {
-      next();
-    }
-  } else {
-    next();
+  const isPublic = to.matched.some(record => record.meta.public);
+  const onlyWhenLoggedOut = to.matched.some(record => record.meta.onlyWhenLoggedOut);
+  const loggedIn = store.state.users.user;
+
+  if (!isPublic && !loggedIn) {
+    return next ({
+      path: '/login',
+      query: { redirect: to.fullPath } // Store the full path to redirect the user to after login
+    });
   }
+  // Do not allow user to visit login page or register page if they are logged in
+  if (loggedIn && onlyWhenLoggedOut) {
+    return next('/');
+  }
+
+  next();
+
 });
 
 new Vue({

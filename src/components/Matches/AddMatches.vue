@@ -1,9 +1,6 @@
 <template>
   <v-container grid-list-xs grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs12>
-        Match: {{ match.bestOf }}
-      </v-flex>
       <v-flex xs12 md6 lg4 v-for="(item, index) in matchList" :key="index">
         <v-card class="flex-card">
           <v-toolbar color="purple" dark>

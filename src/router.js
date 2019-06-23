@@ -4,6 +4,7 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -20,6 +21,10 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
+      meta: {
+        public: true,
+        onlyWhenLoggedOut: true
+      },
       component: () =>
         import(/* webpackChunkName: "login" */ './components/Login.vue')
     },
@@ -32,18 +37,12 @@ export default new Router({
     {
       path: '/add-tournaments',
       name: 'add-tournaments',
-      meta: {
-        authRequired: true
-      },
       component: () =>
         import(/* webpackChunkName: "add-tournaments" */ './components/Tournaments/AddTournaments.vue')
     },
     {
       path: '/add-matches/:id',
       name: 'add-matches',
-      meta: {
-        authRequired: true
-      },
       component: () =>
         import(/* webpackChunkName: "add-match" */ './components/Matches/AddMatches.vue')
     },

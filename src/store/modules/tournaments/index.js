@@ -2,7 +2,6 @@ import firebase from '@/firebase';
 import transform from './transform';
 import router from '@/router';
 import extract from './extract';
-import utils from '@/utils';
 
 export default {
   namespaced: true,
