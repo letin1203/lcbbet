@@ -78,6 +78,7 @@ export default {
           date: item.date,
           link: item.link,
           gId: item.gId,
+          points: item.points,
           createdBy: this.user.user.email
         }
       };

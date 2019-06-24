@@ -1,6 +1,5 @@
 import firebase from '@/firebase';
 import transform from './transform';
-import router from '@/router';
 import extract from './extract';
 
 export default {

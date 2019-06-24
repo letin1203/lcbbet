@@ -39,6 +39,9 @@
               <div>{{ getCreatedString(tournament) }}</div>
             </div>
           </v-card-text>
+          <v-card-actions>
+            <v-btn block color="green" @click="getPoints(tournament)">Get {{ tournament.points }} points</v-btn>
+          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
@@ -47,11 +50,13 @@
 <script>
 import utils from '@/utils';
 import { mapState, mapGetters, mapActions } from 'vuex';
+import { APPCONFIG } from '@/config'
 
 export default {
   computed: {
     ...mapState({
-      tournaments: state => state.tournaments.items
+      tournaments: state => state.tournaments.items,
+      user: state => state.users.user
     }),
     ...mapGetters({
       isAuthenticated: 'users/isAuthenticated'
@@ -68,7 +73,10 @@ export default {
       getListTournaments: 'tournaments/getAll',
       getListMatches: 'matches/getAll',
       setMatches: 'matches/setExtractItems',
-      setTournament: 'tournaments/setOne'
+      setTournament: 'tournaments/setOne',
+      addUserTournament: 'users/addUserTournament',
+      loadSnackbar: 'loadSnackbar',
+      setLoading: 'setLoading'
     }),
     addTournament() {
       this.$router.push({
@@ -87,6 +95,32 @@ export default {
           id: tournament.gId
         }
       });
+    },
+    onSuccessFetched() {
+      this.loadSnackbar({
+        show: true,
+        text: APPCONFIG.FETCHED_SUCCESS_MESSAGE,
+        color: 'success'
+      });
+      setTimeout(() => {
+        this.setLoading(false);
+      }, 200);
+    },
+    getPoints(tournament) {
+      let payload = {
+          data: {
+            tournament: {
+                name: tournament.name,
+                gId: tournament.gId,
+                link: tournament.link
+              },
+            userEmail: this.user.user.email,
+            createdBy: this.user.user.email
+          },
+          callback: this.onSuccessFetched
+      };
+      this.setLoading(true);
+      this.addUserTournament(payload);
     }
   },
   mounted() {

@@ -52,6 +52,7 @@ export default {
           date: payload.data.date,
           link: payload.data.link,
           gId: payload.data.gId,
+          points: payload.data.points,
           createdBy: payload.data.createdBy,
           createdAt: new Date().getTime()
         })

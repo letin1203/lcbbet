@@ -6,6 +6,7 @@ function convertTournament(firestoreModel) {
     date: data.date,
     link: data.link,
     gId: data.gId,
+    points: data.points,
     createdBy: data.createdBy,
     createdAt: data.createdAt
   };

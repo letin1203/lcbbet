@@ -15,8 +15,14 @@ function extractTournaments(tournamentList) {
       name: name,
       link: link,
       gId: gId,
-      date: date 
+      date: date,
+      points: 500
     };
+    if (name.includes('Major')) {
+      tour.points = 1000;
+    } else if (name.includes('The International')) {
+      tour.points = 2000;
+    }
     result.push(tour);
   });
   return result;
